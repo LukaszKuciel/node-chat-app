@@ -18,14 +18,37 @@
             <ul id="messages" class="chat__messages"></ul>
             <div class="chat__footer">
                 <form id="message-form">
-                    <input name="message-text" type="text" placeholder="Your message" autocomplete="off" autofocus/>
+                    <input name="message-text" type="text" placeholder="Your message" autocomplete="off" autofocus required/>
                     <button><i class="fa fa-paper-plane"></i></button>
                 </form>
                 <button id="send-location"><i class="fa fa-map-marker-alt"></i></button>
             </div>
         </section>
+        <script id="message-template" type="text/template">
+            <div class="message__title">
+                <h4>{{from}}</h4>
+                <span>{{createdAt}}</span>
+            </div>
+            <div class="message__body">
+                <p>{{text}}</p>
+            </div>
+        </script>
+
+        <script id="location-message-template" type="text/template">
+            <div class="message__title">
+                <h4>{{from}}</h4>
+                <span>{{createdAt}}</span>
+            </div>
+            <div class="message__body">
+                <p>
+                    <a href="{{url}}" target="_blank">My current location</a>
+                </p>
+            </div>
+        </script>
+
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/lib/moment.js"></script>
+        <script src="/js/lib/mustache.js"></script>
         <script src="/js/index.js"></script>
     </body>
 </html>

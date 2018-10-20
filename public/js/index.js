@@ -21,20 +21,27 @@ socket.on('disconnect', function(){
 
 socket.on('newMessage', function(msg){
     let formatedTime = moment(msg.createdAt).format('h:mm a');
+    let template = _('#message-template').innerHTML;
     let message = _Create('li');
-    message.innerText = `${msg.from} ${formatedTime}: ${msg.text}`;
+    message.classList.add('message');
+    message.innerHTML = Mustache.render(template, {
+        text: msg.text,
+        from: msg.from,
+        createdAt: formatedTime
+    });
     _('#messages').appendChild(message);
 })
 
 socket.on('newLocationMessage', function(msg){
     let formatedTime = moment(msg.createdAt).format('h:mm a');
+    let template = _('#location-message-template').innerHTML;
     let message = _Create('li');
-    let a = _Create('a');
-    a.href = msg.url;
-    a.target = '_blank';
-    a.innerText = 'My current location';
-    message.innerText = `${msg.from} ${formatedTime}: `;
-    message.appendChild(a);
+    message.classList.add('message');
+    message.innerHTML = Mustache.render(template, {
+        url: msg.url,
+        from: msg.from,
+        createdAt: formatedTime
+    });
     _('#messages').appendChild(message);
 })
 
