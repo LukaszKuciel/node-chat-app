@@ -10,6 +10,23 @@ function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
+function scrollToBottom(){
+    let messages = _('#messages');
+    let newMessage = messages.children[messages.children.length - 1];
+    let clientHeight = messages.clientHeight;
+    let scrollTop = messages.scrollTop;
+    let scrollHeight = messages.scrollHeight;
+    let newMessageHeight = newMessage.clientHeight;
+    let lastMessageHeight = 0;
+    if(newMessage.previousSibling){
+        lastMessageHeight = newMessage.previousSibling.clientHeight;
+    };
+
+    if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+        messages.scrollTop = scrollHeight;
+    }
+}
+
 socket.on('connect', function(){
     console.log('Connected to server');
 })
@@ -30,6 +47,7 @@ socket.on('newMessage', function(msg){
         createdAt: formatedTime
     });
     _('#messages').appendChild(message);
+    scrollToBottom();
 })
 
 socket.on('newLocationMessage', function(msg){
@@ -43,6 +61,7 @@ socket.on('newLocationMessage', function(msg){
         createdAt: formatedTime
     });
     _('#messages').appendChild(message);
+    scrollToBottom();
 })
 
 
