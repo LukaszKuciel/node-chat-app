@@ -20,18 +20,20 @@ socket.on('disconnect', function(){
 })
 
 socket.on('newMessage', function(msg){
+    let formatedTime = moment(msg.createdAt).format('h:mm a');
     let message = _Create('li');
-    message.innerText = `${msg.from}: ${msg.text}`;
+    message.innerText = `${msg.from} ${formatedTime}: ${msg.text}`;
     _('#messages').appendChild(message);
 })
 
 socket.on('newLocationMessage', function(msg){
+    let formatedTime = moment(msg.createdAt).format('h:mm a');
     let message = _Create('li');
     let a = _Create('a');
     a.href = msg.url;
     a.target = '_blank';
     a.innerText = 'My current location';
-    message.innerText = `${msg.from}: `;
+    message.innerText = `${msg.from} ${formatedTime}: `;
     message.appendChild(a);
     _('#messages').appendChild(message);
 })
