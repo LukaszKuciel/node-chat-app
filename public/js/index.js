@@ -43,11 +43,9 @@ _("#message-form").onsubmit = function(event){
     socket.emit('createMessage', {
         from: 'User',
         text: _('[name="message-text"]').value
-    }, function(data){
-        console.log('Got it!', data);
+    }, function(){
+        _('[name="message-text"]').value = "";
     });
-
-    _('[name="message-text"]').value = "";
 };
 
 _('#send-location').onclick = function(event){
@@ -56,11 +54,15 @@ _('#send-location').onclick = function(event){
     if(!navigator.geolocation) {
         return alert('Geolocation not supported by your browser.');
     }
+    _('#send-location').disabled = true;
+    _('#send-location').innerHTML = '<div id="wave"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
     navigator.geolocation.getCurrentPosition(function(position){
             socket.emit('createLocationMessage', {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             })
+            _('#send-location').disabled = false;
+            _('#send-location').innerHTML = `<i class="fa fa-map-marker-alt"></i>`;
         }, function(){
             return alert('Unable to fetch location.');
         },
