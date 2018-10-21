@@ -2,6 +2,13 @@ let socket = io();
 const _All = document.querySelectorAll.bind(document);
 const _ = document.querySelector.bind(document);
 const _Create = document.createElement.bind(document);
+
+function removeChildren(parent){
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
 function addListenerMulti(element, eventNames, listener) {
     let events = eventNames.split(' ');
     events.forEach(event => element.addEventListener(event, listener, false));
@@ -28,13 +35,33 @@ function scrollToBottom(){
 }
 
 socket.on('connect', function(){
-    console.log('Connected to server');
+    let params = deparamURL(window.location.search);
+    socket.emit('join', params, function(err){
+        if(err){
+            alert(err);
+            window.location.href = '/';
+        }else{
+            console.log('no error');
+            
+        }
+    })
 })
 
 socket.on('disconnect', function(){
     console.log('Disconnected from server');
     
 })
+
+socket.on('updateUsersList', function(users){
+    removeChildren(_('#users'));
+    let ul = _Create('ul');
+    users.forEach(function(user){
+        let li = _Create('li');
+        li.innerText = user;
+        ul.appendChild(li);
+    });
+    _('#users').appendChild(ul);
+});
 
 socket.on('newMessage', function(msg){
     let formatedTime = moment(msg.createdAt).format('h:mm a');
