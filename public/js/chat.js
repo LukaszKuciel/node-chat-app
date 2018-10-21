@@ -96,7 +96,6 @@ _("#message-form").onsubmit = function(event){
     event.preventDefault();
 
     socket.emit('createMessage', {
-        from: 'User',
         text: _('[name="message-text"]').value
     }, function(){
         _('[name="message-text"]').value = "";
